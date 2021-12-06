@@ -3,15 +3,26 @@
 /* NOTES
 *   1. Unused variables must be begin by underscore
 *   2. Essential chapter Memory security : https://jimskapt.github.io/rust-book-fr/ch04-01-what-is-ownership.html
+*   3. Print debuging infos : 
+        => println!("{:#?}", object);
+        => dbg!(&object);
+*   4. The function with "!" at end is functional macros 
 */
 
-/* MACRO 
+/****** DERIVE MACRO ********
 *
 *   #[function(parameter)] => apply in next line (function, module, structure ...)
 *   #![function(parameter)] => apply in entire crate
 *
+****  DERIVE MACRO LIST  ****
+*   #![allow(unused_variables)] // Désactive les warnings concernant les variables non utilisés
+*   #[derive(debug)]            // Permet de dériver un type non primitif afin de stocker des 
+*                               // informations de déboguage (ex: println!("structure : {:?}", ma_structure);)
+*                               // Elle doit être placé au dessus de la définition d'un type non primitif
+*   #![allow(dead_code)]        // Autorise les fonctions non utilisés
 */
 #![allow(dead_code)]
+#![allow(unused_variables)]
 
 // TYPES & CONST
 const BINARY_WORD: u8 = 0b1111_0000;
@@ -110,6 +121,19 @@ fn main() {
     }
     println!("DÉCOLLAGE !!!");
 
+    // STRUCTURE INITIALISATION
+    let utilisateur1 = Utilisateur {
+        email: String::from("quelquun@example.com"),
+        pseudo: String::from("pseudoquelconque123"),
+        actif: true,
+        nombre_de_connexions: 1,
+    };
+
+    // STRUCTURE INITIALISATION WITH OTHER INSTANCE
+    let utilisateur2 = Utilisateur {
+        email: String::from("quelquundautre@example.com"),
+        ..utilisateur1 // signifie que le reste de la structure sera complété avec l'instance de l'autre structure Utilisateur
+    };
 }
 
 // FUNCTIONS
@@ -123,4 +147,12 @@ fn afficher_mesure_avec_unite(valeur: i32, unite: char) {
 
 fn plus_un(x: i32) -> i32 {
     x + 1
+}
+
+// STRUCTURE DEFINITION
+struct Utilisateur {
+    actif: bool,
+    pseudo: String,
+    email: String,
+    nombre_de_connexions: u64,
 }
